@@ -16,7 +16,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
         
         # She notices the page title and header mention GTD
-        self.assertIn('GTD', self.browser.title)
+        self.assertIn('GSD', self.browser.title)
         self.fail('Finish the test!')
         
         # She is invited to enter a task right away
