@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.http import HttpRequest
 
 from tasks.views import home_page
+from tasks.models import Task 
 
 class HomePageTest(TestCase):
     def test_root_url_resolves_to_home_page_view(self):
@@ -26,3 +27,21 @@ class HomePageTest(TestCase):
         self.assertIn('A new task', response.content.decode())
         expected_html = render_to_string('home.html', {'new_task_text': 'A new task'}, request=request)
         self.assertEqual(response.content.decode(), expected_html)
+
+class TaskModelTest(TestCase):
+    def test_saving_and_retrieving_tasks(self):
+        first_task = Task()
+        first_task.text = "The first (ever) task"
+        first_task.save()
+
+        second_task = Task()
+        second_task.text = "Task the second"
+        second_task.save()
+
+        saved_tasks = Task.objects.all()
+        self.assertEqual(saved_tasks.count(), 2)
+
+        first_saved_task = saved_tasks[0]
+        second_saved_task = saved_tasks[1]
+        self.assertEqual(first_saved_task.text, 'The first (ever) task')
+        self.assertEqual(second_saved_task.text, 'Task the second')
