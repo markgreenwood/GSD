@@ -1,6 +1,12 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from tasks.models import Task 
 
 # Create your views here.
 def home_page(request):
-    return render(request, 'home.html', {'new_task_text': request.POST.get('task_text', ''),})
+    if request.method == 'POST':
+        Task.objects.create(text=request.POST['task_text'])
+        return redirect('/')
+
+    tasks = Task.objects.all()
+
+    return render(request, 'home.html', {'tasks': tasks})
