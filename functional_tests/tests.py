@@ -35,9 +35,11 @@ class NewVisitorTest(LiveServerTestCase):
         # She types "Buy groceries" into a text box
         inputbox.send_keys('Buy groceries')
         
-        # When she hits enter, the page updates, and now the page lists 
+        # When she hits enter, she is taken to a new URL, and now the page lists 
         # "1: Buy groceries" as an item in a task list
         inputbox.send_keys(Keys.ENTER)
+        catherine_list_url = self.browser.current_url
+        self.assertRegex(catherine_list_url, '/tasks/.+')
         self.check_for_row_in_list_table('1: Buy groceries')
         
         # There is still a text box inviting her to add another item.
@@ -50,14 +52,35 @@ class NewVisitorTest(LiveServerTestCase):
         # The page updates again, and now shows both items on her list
         self.check_for_row_in_list_table('1: Buy groceries')
         self.check_for_row_in_list_table('2: Plan trip to Virginia Tech')
+
+        # Now a new user, Thorsten, comes along to the site.
+
+        ## We use a new browser session to make sure that no information
+        ## of Catherine's is coming through from cookies, etc.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Thorsten visits the home page. There is no sign of Catherine's list.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy groceries', page_text)
+        self.assertNotIn('Plan trip to Virginia Tech', page_text)
+
+        # Thorsten starts a new list by entering a new item. He has more Product
+        # Engineering tasks than Catherine...
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Write wafer mapping software')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Thorsten gets his own unique URL
+        thorsten_list_url = self.browser.current_url
+        self.assertRegex(thorsten_list_url, '/lists/.+')
+        self.assertNotEqual(thorsten_list_url, catherine_list_url)
+
+        # Again, there is no trace of Catherine's list
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy groceries', page_text)
+        self.assertIn('Write wafer mapping software', page_text)
         
-        # Catherine wonders whether the site will remember her list. Then she
-        # sees that the site has generated a unique URL for her -- there is some
-        # explanatory text to that effect.
-        
-        self.fail('Finish the test!')
-        
-        # She visits that URL - her task list is still there.
-        
-        # Satisfied, she goes to sleep.
+        # Satisfied, they both go back to sleep.
 
