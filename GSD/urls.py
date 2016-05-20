@@ -16,11 +16,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-import tasks.views
+import lists.views
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'^$', tasks.views.home_page, name='home'),
-    url(r'^tasks/the-only-list-in-the-world/$', tasks.views.view_list,
+    url(r'^$', lists.views.home_page, name='home'),
+    url(r'^lists/the-only-list-in-the-world/$', lists.views.view_list,
         name='view_list'),
 ]

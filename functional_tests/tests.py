@@ -29,7 +29,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('GSD', header_text)
         
         # She is invited to enter a task right away
-        inputbox = self.browser.find_element_by_id('id_new_task')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a task')
         
         # She types "Buy groceries" into a text box
@@ -39,13 +39,13 @@ class NewVisitorTest(LiveServerTestCase):
         # "1: Buy groceries" as an item in a task list
         inputbox.send_keys(Keys.ENTER)
         catherine_list_url = self.browser.current_url
-        self.assertRegex(catherine_list_url, '/tasks/.+')
+        self.assertRegex(catherine_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy groceries')
         
         # There is still a text box inviting her to add another item.
         # She enters "Plan trip to Virginia Tech" (Catherine is a college
         # recruiter for her company)
-        inputbox = self.browser.find_element_by_id('id_new_task')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Plan trip to Virginia Tech')
         inputbox.send_keys(Keys.ENTER)
 
@@ -68,13 +68,13 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Thorsten starts a new list by entering a new item. He has more Product
         # Engineering tasks than Catherine...
-        inputbox = self.browser.find_element_by_id('id_new_task')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Write wafer mapping software')
         inputbox.send_keys(Keys.ENTER)
 
         # Thorsten gets his own unique URL
         thorsten_list_url = self.browser.current_url
-        self.assertRegex(thorsten_list_url, '/tasks/.+')
+        self.assertRegex(thorsten_list_url, '/lists/.+')
         self.assertNotEqual(thorsten_list_url, catherine_list_url)
 
         # Again, there is no trace of Catherine's list
