@@ -21,4 +21,6 @@ import tasks.views
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^$', tasks.views.home_page, name='home'),
+    url(r'^tasks/the-only-list-in-the-world/$', tasks.views.view_list,
+        name='view_list'),
 ]

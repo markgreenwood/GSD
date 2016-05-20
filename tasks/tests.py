@@ -36,22 +36,13 @@ class HomePageTest(TestCase):
         response = home_page(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'],
+                '/tasks/the-only-list-in-the-world/')
 
     def test_home_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
         home_page(request)
         self.assertEqual(Task.objects.count(), 0)
-
-    def test_home_page_displays_all_list_items(self):
-        Task.objects.create(text='Task 1')
-        Task.objects.create(text='Task 2')
-
-        request = HttpRequest()
-        response = home_page(request)
-
-        self.assertIn('Task 1', response.content.decode())
-        self.assertIn('Task 2', response.content.decode())
 
 class TaskModelTest(TestCase):
     def test_saving_and_retrieving_tasks(self):
@@ -70,3 +61,17 @@ class TaskModelTest(TestCase):
         second_saved_task = saved_tasks[1]
         self.assertEqual(first_saved_task.text, 'The first (ever) task')
         self.assertEqual(second_saved_task.text, 'Task the second')
+
+class ListViewTest(TestCase):
+    def test_uses_list_template(self):
+        response = self.client.get('/tasks/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list.html')
+
+    def test_displays_all_tasks(self):
+        Task.objects.create(text='task 1')
+        Task.objects.create(text='task 2')
+
+        response = self.client.get('/tasks/the-only-list-in-the-world/')
+
+        self.assertContains(response, 'task 1')
+        self.assertContains(response, 'task 2')

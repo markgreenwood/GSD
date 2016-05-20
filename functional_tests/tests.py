@@ -58,7 +58,7 @@ class NewVisitorTest(LiveServerTestCase):
         ## We use a new browser session to make sure that no information
         ## of Catherine's is coming through from cookies, etc.
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
         # Thorsten visits the home page. There is no sign of Catherine's list.
         self.browser.get(self.live_server_url)
@@ -68,13 +68,13 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Thorsten starts a new list by entering a new item. He has more Product
         # Engineering tasks than Catherine...
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_task')
         inputbox.send_keys('Write wafer mapping software')
         inputbox.send_keys(Keys.ENTER)
 
         # Thorsten gets his own unique URL
         thorsten_list_url = self.browser.current_url
-        self.assertRegex(thorsten_list_url, '/lists/.+')
+        self.assertRegex(thorsten_list_url, '/tasks/.+')
         self.assertNotEqual(thorsten_list_url, catherine_list_url)
 
         # Again, there is no trace of Catherine's list

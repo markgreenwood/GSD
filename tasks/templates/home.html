@@ -3,15 +3,10 @@
 		<title>GSD Tasks</title>
 	</head>
 	<body>
-		<h1>Your GSD task list</h1>
+		<h1>Start a new GSD task list</h1>
 		<form method="POST">
 			<input name="task_text" id="id_new_task" placeholder="Enter a task" />
 			{% csrf_token %}
 		</form>
-		<table id="id_list_table">
-			{% for task in tasks %}
-			<tr><td>{{ forloop.counter }}: {{ task.text }}</td></tr>
-			{% endfor %}
-		</table>
 	</body>
 </html>

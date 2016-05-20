@@ -5,8 +5,11 @@ from tasks.models import Task
 def home_page(request):
     if request.method == 'POST':
         Task.objects.create(text=request.POST['task_text'])
-        return redirect('/')
+        return redirect('/tasks/the-only-list-in-the-world/')
 
     tasks = Task.objects.all()
+    return render(request, 'home.html')
 
-    return render(request, 'home.html', {'tasks': tasks})
+def view_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'list.html', {'tasks': tasks})
