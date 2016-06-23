@@ -15,7 +15,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('GSD', header_text)
         
         # She is invited to enter a task right away
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a task')
         
         # She types "Buy groceries" into a text box
@@ -31,7 +31,7 @@ class NewVisitorTest(FunctionalTest):
         # There is still a text box inviting her to add another item.
         # She enters "Plan trip to Virginia Tech" (Catherine is a college
         # recruiter for her company)
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Plan trip to Virginia Tech')
         inputbox.send_keys(Keys.ENTER)
 
@@ -54,7 +54,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Thorsten starts a new list by entering a new item. He has more Product
         # Engineering tasks than Catherine...
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Write wafer mapping software')
         inputbox.send_keys(Keys.ENTER)
 
